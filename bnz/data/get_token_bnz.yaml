@@ -1,0 +1,38 @@
+-
+  # 一个参数为空
+  client_id: ""
+  client_secret: 123456
+  grant_type: password
+  username: 1655445717373
+  password: uvfNt3mBZNOiyTUHczTZyQ==
+-
+  client_id: test1
+  client_secret: ""
+  grant_type: password
+  username: 1655445717373
+  password: uvfNt3mBZNOiyTUHczTZyQ==
+-
+  client_id: test1
+  client_secret: 123456
+  grant_type: ""
+  username: 1655445717373
+  password: uvfNt3mBZNOiyTUHczTZyQ==
+-
+  client_id: test1
+  client_secret: 123456
+  grant_type: password
+  username: ""
+  password: uvfNt3mBZNOiyTUHczTZyQ==
+-
+  client_id: test1
+  client_secret: 123456
+  grant_type: password
+  username: 1655445717373
+  password: ""
+-
+  # 一个参数错误
+#  client_id: test1
+#  client_secret: 123456
+#  grant_type: password
+#  username: 1655445717373
+#  password: uvfNt3mBZNOiyTUHczTZyQ==
