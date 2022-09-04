@@ -1,0 +1,17 @@
+---
+#openid参数为空
+openid: ""
+remark: 蛇皮22
+code: 40003
+
+---
+#openid参数错误
+openid: ajdsfka24
+remark: 蛇皮134
+code: 40003
+
+---
+#remark为31个字节
+openid: oKBO_6q-Wp5PAS6HLsZFV0COAHs0
+remark: qwertyuiopasdfghjklzxcvbnmqwety
+code: 40092

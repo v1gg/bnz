@@ -1,0 +1,25 @@
+---
+#id参数为空
+id: ""
+name: 蛇皮啦啦啦
+code: 45058
+---
+#id参数错误
+id: 456
+name: 啦啦啦蛇皮
+code: -1
+---
+#name为空
+id: 101
+name: ""
+code: 45157
+---
+#name为31个字符
+id: 101
+name: qwertyuiopasdfghjklzxcvbnmqwert
+code: 45158
+---
+#name已存在
+id: 101
+name: 广西老表
+code: 45157

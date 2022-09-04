@@ -1,0 +1,12 @@
+---
+#name为空
+name: ""
+code: 45157
+---
+#name长度为31个字符
+name: "qwertyuiopasdfghjklzxcvbnmqwert"
+code: 45158
+---
+#已存在的标签名
+name: 广西老表
+code: 45157

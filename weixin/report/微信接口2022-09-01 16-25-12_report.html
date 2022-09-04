@@ -1,0 +1,1738 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>微信接口接口用例执行报告</title>
+    <meta name="generator" content="HTMLTestRunner 1.2.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+    
+<style type="text/css" media="screen">
+body        { font-family: Microsoft YaHei;padding: 20px; font-size: 100%; }
+table       { font-size: 100%; }
+.table tbody tr td{
+            vertical-align: middle;
+        }
+/* -- heading ---------------------------------------------------------------------- */
+.heading .description, .attribute {
+    clear: both;
+}
+/* --- 失败和错误合集样式 -- Gelomen --- */
+.failCollection, .errorCollection {
+    width: 100px;
+    float: left;
+}
+#failCaseOl li {
+    color: red
+}
+#errorCaseOl li {
+    color: orange
+}
+/* --- 打开截图特效样式 -- Gelomen --- */
+.data-img{
+    cursor:pointer
+}
+.pic_looper{
+    width:100%;
+    height:100%;
+    position: fixed;
+    left: 0;
+    top:0;
+    opacity: 0.6;
+    background: #000;
+    display: none;
+    z-index: 100;
+}
+.pic_show{
+    width:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+    text-align: center;
+    display: none;
+    z-index: 100;
+}
+.pic_box{
+    padding:10px;
+    width:90%;
+    height:90%;
+    margin:40px auto;
+    text-align: center;
+    overflow: hidden;
+}
+.pic_box img{
+    width: auto;
+    height: 100%;
+    -moz-box-shadow: 0px 0px 20px 0px #000;
+    -webkit-box-shadow: 0px 0px 20px 0px #000;
+    box-shadow: 0px 0px 20px 0px #000;
+}
+/* --- 饼状图div样式 -- Gelomen --- */
+#container {
+    width: 450px;
+    height: 300px;
+    float: left;
+}
+/* -- report ------------------------------------------------------------------------ */
+#total_row  { font-weight: bold; }
+.passCase   { color: #5cb85c; }
+.failCase   { color: #d9534f; font-weight: bold; }
+.errorCase  { color: #f0ad4e; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+.screenshot:link { text-decoration: none;color: deeppink; }
+.screenshot:visited { text-decoration: none;color: deeppink; }
+.screenshot:hover { text-decoration: none;color: darkcyan; }
+.screenshot:active { text-decoration: none;color: deeppink; }
+</style>
+
+</head>
+<body >
+<script language="javascript" type="text/javascript">
+    $(function(){
+        // 修改 失败 和 错误 用例里对应按钮的颜色ClassName为动态加载 -- Gelomen
+        $("button").each(function () {
+            var text = $(this).text();
+            if(text == "失败"){
+                $(this).addClass("btn-danger")
+            }else if(text == "错误") {
+                $(this).addClass("btn-warning")
+            }
+        });
+        // 给失败和错误合集加样式 -- Gelomen
+        var p_attribute = $("p.attribute");
+        p_attribute.eq(4).addClass("failCollection");
+        p_attribute.eq(5).addClass("errorCollection");
+        // 打开截图，放大，点击任何位置可以关闭图片  -- Gelomen
+        $(".screenshot").click(function(){
+            var img = $(this).attr("img");
+            $('.pic_show img').attr('src', img);
+            $('.pic_looper').fadeIn(200);
+            $('.pic_show').fadeIn(200);
+            var browserHeight = $(window).height();
+            var pic_boxHeight = $(".pic_box").height();
+            var top = (browserHeight - pic_boxHeight)/2;
+            $('.pic_box').css("margin-top", top + "px")
+        });
+        $('.pic_looper, .pic_show').click(function(){
+            $('.pic_looper').fadeOut(200);
+            $('.pic_show').fadeOut(200)
+        });
+        var browserWidth = $(window).width();
+        var margin_left = browserWidth/2 - 450;
+        if(margin_left <= 240){
+            $("#container").css("margin", "auto");
+        }else {
+            $("#container").css("margin-left", margin_left + "px");
+        }
+        $(window).resize(function(){
+            // 改变窗口大小时，自动改变图片与顶部的距离  -- Gelomen
+            var browserHeight = $(window).height();
+            var pic_boxHeight = $(".pic_box").height();
+            var top = (browserHeight - pic_boxHeight)/2;
+            $('.pic_box').css("margin-top", top + "px");
+            // 改变窗口大小时，自动改变饼图的边距  -- Gelomen
+            var browserWidth = $(window).width();
+            var margin_left = browserWidth/2 - 450;
+            if(margin_left <= 240){
+                $("#container").css("margin", "auto");
+            }else {
+                $("#container").css("margin-left", margin_left + "px");
+            }
+        });
+        // 距离顶部超过浏览器窗口一屏时，回到顶部按钮才出现  -- Gelomen
+        $(window).scroll(function(){
+            var browserHeight = $(window).height();
+            var top = $(window).scrollTop();
+            if(top >= browserHeight){
+                $("#toTop").css("display", "block")
+            }else {
+                $("#toTop").css("display", "none")
+            }
+        })
+        // 增加回到顶部过程的动画，以看上去不会那么生硬  -- Gelomen
+        $("#toTop").click(function() {
+            $("html,body").animate({"scrollTop":0}, 700)
+        })
+        // 增加饼状图  -- Gelomen
+        $('#container').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                spacing : [0, 0, 0, 0]
+            },
+            credits: {
+                enabled: false
+            },
+            navigation: {
+                buttonOptions: {
+                    enabled: false
+                }
+            },
+            title: {
+                floating:true,
+                text: '测试结果占比'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    colors: ['#81ca9d', '#f16d7e', '#fdc68c'],
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    point: {
+                        events: {
+                            mouseOver: function(e) {  // 鼠标滑过时动态更新标题
+                                chart.setTitle({
+                                    text: e.target.name+ '\t'+ e.target.y + ' 个'
+                                });
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                innerSize: '80%',
+                name: '比例',
+                data: [
+                    ['通过', 47],
+                    {
+                        name: '失败',
+                        y: 0,
+                        sliced: true,
+                        selected: true
+                    },
+                    ['错误', 6]
+                ]
+            }]
+        }, function(c) {
+            // 环形图圆心
+            var centerY = c.series[0].center[1],
+                titleHeight = parseInt(c.title.styles.fontSize);
+            c.setTitle({
+                y:centerY + titleHeight/2
+            });
+            chart = c;
+        });
+        // 查看 失败 和 错误 合集链接文字切换  -- Gelomen
+        $(".showDetail").click(function () {
+            if($(this).html() == "点击查看"){
+                $(this).html("点击收起")
+            }else {
+                $(this).html("点击查看")
+            }
+        })
+    });
+output_list = Array();
+/*level 调整增加只显示通过用例的分类 --Findyou / 修复筛选显示bug --Gelomen
+0:Summary //all hiddenRow
+1:Failed  //pt&et hiddenRow, ft none
+2:Pass    //pt none, ft&et hiddenRow
+3:Error   //pt&ft hiddenRow, et none
+4:All     //all none
+*/
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level == 2 || level == 0 || level == 3) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level == 1 || level == 0 || level == 3) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+        if (id.substr(0,2) == 'et') {
+            if (level == 1 || level == 0 || level == 2) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+    }
+    //加入【详细】切换文字变化 --Findyou
+    detail_class=document.getElementsByClassName('detail');
+    //console.log(detail_class.length)
+    if (level == 3) {
+        for (var i = 0; i < detail_class.length; i++){
+            detail_class[i].innerHTML="收起"
+        }
+    }
+    else{
+            for (var i = 0; i < detail_class.length; i++){
+            detail_class[i].innerHTML="详细"
+        }
+    }
+}
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        //ID修改 点 为 下划线 -Findyou
+        tid0 = 't' + cid.substr(1) + '_' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+            if (!tr) {
+                tid = 'e' + tid0;
+                tr = document.getElementById(tid);
+            }
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        //修改点击无法收起的BUG，加入【详细】切换文字变化 --Findyou
+        if (toHide) {
+            document.getElementById(tid).className = 'hiddenRow';
+            document.getElementById(cid).innerText = "详细"
+        }
+        else {
+            document.getElementById(tid).className = '';
+            document.getElementById(cid).innerText = "收起"
+        }
+    }
+}
+function html_escape(s) {
+    s = s.replace(/&/g,'&');
+    s = s.replace(/</g,'<');
+    s = s.replace(/>/g,'>');
+    return s;
+}
+</script>
+<div class='pic_looper'></div> <div class='pic_show'><div class='pic_box'><img src=''/></div> </div>
+<div class='heading'>
+<div style="width: 650px; float: left;">
+    <h1 style="font-family: Microsoft YaHei">微信接口接口用例执行报告</h1>
+    <p class='attribute'><strong>测试人员 : </strong> QA</p>
+<p class='attribute'><strong>开始时间 : </strong> 2022-09-01 16:25:12</p>
+<p class='attribute'><strong>合计耗时 : </strong> 0:00:42.352736</p>
+<p class='attribute'><strong>测试结果 : </strong> 共 53，通过 47，错误 6，通过率 = 88.68%</p>
+<p class='attribute'><strong>失败用例合集 : </strong> <ol style='float: left;'>无</ol></p>
+<p class='attribute'><strong>错误用例合集 : </strong> <div class='panel-default' style='float: left;'><a class='showDetail' data-toggle='collapse' href='#errorCaseOl' style='text-decoration: none;'>点击查看</a></div><ol id='errorCaseOl' class='collapse' style='float: left;'><li>test_02_tags_create_correct_filling_1 (test_create_label.TestCreateLabel)</li><li>test_02_tags_create_correct_filling_2 (test_create_label.TestCreateLabel)</li><li>test_02_tags_create_correct_filling_3 (test_create_label.TestCreateLabel)</li><li>test_02_tags_create_correct_filling_4 (test_create_label.TestCreateLabel)</li><li>test_02_tags_create_correct_filling_5 (test_create_label.TestCreateLabel)</li><li>test_03_tags_create_name_parameter_not_filled_3 (test_create_label.TestCreateLabel)</li></ol></p>
+
+    <p class='description'></p>
+</div>
+<div id="container"></div>
+</div>
+
+
+<div style="width: 500px; clear: both;">
+<p id='show_detail_line'>
+<a class="btn btn-primary" href='javascript:showCase(0)'>概要{ 88.68% }</a>
+<a class="btn btn-success" href='javascript:showCase(2)'>通过{ 47 }</a>
+<a class="btn btn-danger" href='javascript:showCase(1)'>失败{ 0 }</a>
+<a class="btn btn-warning" href='javascript:showCase(3)'>错误{ 6 }</a>
+<a class="btn btn-info" href='javascript:showCase(4)'>所有{ 53 }</a>
+</p>
+</div>
+<table id='result_table' class="table table-condensed table-bordered table-hover">
+<colgroup>
+<col align='left' style="width: 300px;"/>
+<col align='right' style="width: 300px;"/>
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' style="width: 200px;"/>
+</colgroup>
+<tr id='header_row' class="text-center success" style="font-weight: bold;font-size: 14px;">
+    <td>用例集/测试用例</td>
+    <td>说明</td>
+    <td>总计</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>耗时</td>
+    <td>详细</td>
+</tr>
+
+<tr class='errorClass warning'>
+    <td>TestCreateLabel</td>
+    <td>分组管理接口类</td>
+    <td class="text-center">11</td>
+    <td class="text-center">5</td>
+    <td class="text-center">0</td>
+    <td class="text-center">6</td>
+    <td class="text-center">9.26秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c1',11)" class="detail" id='c1'>详细</a></td>
+</tr>
+
+    <tr id='pt1_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_01_tags_create_correct_filling</div></td>
+        <td style="vertical-align: middle">参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt1_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt1_1'>通过</button>
+        <div id='div_pt1_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt1_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt1_1'>通过</button>
+        <div id='div_pt1_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt1_1: [2022-09-01 16:25:12,820] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:13,304] - log.py] - INFO: 开始执行用例：创建标签，参数填写正确
+[2022-09-01 16:25:13,843] - log.py] - INFO: 返回数据正确，返回结果广西老表55252
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt1_2' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_02_tags_create_access_token_parameter_not_filled</div></td>
+        <td style="vertical-align: middle">access_token参数未填</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt1_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt1_2'>通过</button>
+        <div id='div_pt1_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt1_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt1_2'>通过</button>
+        <div id='div_pt1_2' class="collapse in">
+        <pre style="text-align:left">
+        
+pt1_2: [2022-09-01 16:25:13,843] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:14,243] - log.py] - INFO: 开始执行用例：创建标签，access_token参数未填
+[2022-09-01 16:25:14,557] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_3' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test_02_tags_create_correct_filling_1</div></td>
+        <td style="vertical-align: middle">参数填写正确(name长度边界)</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_3'>错误</button>
+        <div id='div_et1_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_3'>错误</button>
+        <div id='div_et1_3' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_3: [2022-09-01 16:25:14,558] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:14,961] - log.py] - INFO: 开始执行用例：创建标签参数填写正确，name字符长度正确
+{'errcode': 45157, 'errmsg': 'invalid tag name hint: [mHaeFBeVf-ybMt6a] rid: 63106c6d-20bfb1b6-7d5f5805'}
+Traceback (most recent call last):
+  File "C:\Users\陈帅东\AppData\Local\Programs\Python\Python39\lib\site-packages\ddt.py", line 220, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\python\weixin\testcase\test_create_label.py", line 80, in test_02_tags_create_correct_filling
+    text = res.json()["tag"]["name"]
+KeyError: 'tag'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_4' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test_02_tags_create_correct_filling_2</div></td>
+        <td style="vertical-align: middle">参数填写正确(name长度边界)</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_4'>错误</button>
+        <div id='div_et1_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_4'>错误</button>
+        <div id='div_et1_4' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_4: [2022-09-01 16:25:15,404] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:15,843] - log.py] - INFO: 开始执行用例：创建标签参数填写正确，name字符长度正确
+{'errcode': 45157, 'errmsg': 'invalid tag name hint: [mHaeLoEVf-srxVMA] rid: 63106c6e-0ca2c091-592a922f'}
+Traceback (most recent call last):
+  File "C:\Users\陈帅东\AppData\Local\Programs\Python\Python39\lib\site-packages\ddt.py", line 220, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\python\weixin\testcase\test_create_label.py", line 80, in test_02_tags_create_correct_filling
+    text = res.json()["tag"]["name"]
+KeyError: 'tag'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_5' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test_02_tags_create_correct_filling_3</div></td>
+        <td style="vertical-align: middle">参数填写正确(name长度边界)</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_5' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_5'>错误</button>
+        <div id='div_et1_5' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_5' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_5'>错误</button>
+        <div id='div_et1_5' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_5: [2022-09-01 16:25:16,352] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:16,768] - log.py] - INFO: 开始执行用例：创建标签参数填写正确，name字符长度正确
+{'errcode': 45157, 'errmsg': 'invalid tag name hint: [mHae1u5Vf-8RYZeA] rid: 63106c6f-5c9070e4-3b076bba'}
+Traceback (most recent call last):
+  File "C:\Users\陈帅东\AppData\Local\Programs\Python\Python39\lib\site-packages\ddt.py", line 220, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\python\weixin\testcase\test_create_label.py", line 80, in test_02_tags_create_correct_filling
+    text = res.json()["tag"]["name"]
+KeyError: 'tag'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_6' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test_02_tags_create_correct_filling_4</div></td>
+        <td style="vertical-align: middle">参数填写正确(name长度边界)</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_6' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_6'>错误</button>
+        <div id='div_et1_6' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_6' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_6'>错误</button>
+        <div id='div_et1_6' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_6: [2022-09-01 16:25:17,250] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:17,761] - log.py] - INFO: 开始执行用例：创建标签参数填写正确，name字符长度正确
+{'errcode': 45157, 'errmsg': 'invalid tag name hint: [mHae58sQf-my] rid: 63106c70-1d9c42ca-7cf5268c'}
+Traceback (most recent call last):
+  File "C:\Users\陈帅东\AppData\Local\Programs\Python\Python39\lib\site-packages\ddt.py", line 220, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\python\weixin\testcase\test_create_label.py", line 80, in test_02_tags_create_correct_filling
+    text = res.json()["tag"]["name"]
+KeyError: 'tag'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_7' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test_02_tags_create_correct_filling_5</div></td>
+        <td style="vertical-align: middle">参数填写正确(name长度边界)</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_7' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_7'>错误</button>
+        <div id='div_et1_7' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_7' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_7'>错误</button>
+        <div id='div_et1_7' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_7: [2022-09-01 16:25:18,174] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:18,552] - log.py] - INFO: 开始执行用例：创建标签参数填写正确，name字符长度正确
+{'errcode': 45157, 'errmsg': 'invalid tag name hint: [mHae6BsQf-pCG8PA] rid: 63106c71-29574650-65c54c25'}
+Traceback (most recent call last):
+  File "C:\Users\陈帅东\AppData\Local\Programs\Python\Python39\lib\site-packages\ddt.py", line 220, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\python\weixin\testcase\test_create_label.py", line 80, in test_02_tags_create_correct_filling
+    text = res.json()["tag"]["name"]
+KeyError: 'tag'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt1_8' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_03_tags_create_name_parameter_not_filled_1</div></td>
+        <td style="vertical-align: middle">name参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt1_8' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt1_8'>通过</button>
+        <div id='div_pt1_8' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt1_8' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt1_8'>通过</button>
+        <div id='div_pt1_8' class="collapse in">
+        <pre style="text-align:left">
+        
+pt1_8: [2022-09-01 16:25:18,977] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:19,321] - log.py] - INFO: 开始执行用例：name参数填写错误
+{'errcode': 45157, 'errmsg': 'invalid tag name hint: [mHae1Bmre-wZ.7la] rid: 63106c71-51414000-69c1f78c'}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt1_9' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_03_tags_create_name_parameter_not_filled_2</div></td>
+        <td style="vertical-align: middle">name参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt1_9' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt1_9'>通过</button>
+        <div id='div_pt1_9' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt1_9' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt1_9'>通过</button>
+        <div id='div_pt1_9' class="collapse in">
+        <pre style="text-align:left">
+        
+pt1_9: [2022-09-01 16:25:19,767] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:20,156] - log.py] - INFO: 开始执行用例：name参数填写错误
+{'errcode': 45158, 'errmsg': 'tag name too long hint: [mHaevPyWf-2FiX7a] rid: 63106c72-2ef0dd94-42a9955f'}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_10' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test_03_tags_create_name_parameter_not_filled_3</div></td>
+        <td style="vertical-align: middle">name参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_10' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_10'>错误</button>
+        <div id='div_et1_10' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_10' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_10'>错误</button>
+        <div id='div_et1_10' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_10: [2022-09-01 16:25:20,664] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:21,053] - log.py] - INFO: 开始执行用例：name参数填写错误
+{'tag': {'id': 137, 'name': '\\u5e7f\\u897f\\u8001\\u8868'}}
+Traceback (most recent call last):
+  File "C:\Users\陈帅东\AppData\Local\Programs\Python\Python39\lib\site-packages\ddt.py", line 220, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\python\weixin\testcase\test_create_label.py", line 124, in test_03_tags_create_name_parameter_not_filled
+    text = res.json()["errcode"]
+KeyError: 'errcode'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt1_11' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_create_access_token_parameter_filling_error</div></td>
+        <td style="vertical-align: middle">access_token参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt1_11' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt1_11'>通过</button>
+        <div id='div_pt1_11' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt1_11' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt1_11'>通过</button>
+        <div id='div_pt1_11' class="collapse in">
+        <pre style="text-align:left">
+        
+pt1_11: [2022-09-01 16:25:21,453] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:21,833] - log.py] - INFO: 开始执行用例：access_token参数填写错误
+[2022-09-01 16:25:22,079] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>TestDeleteLabel</td>
+    <td>删除标签接口类</td>
+    <td class="text-center">8</td>
+    <td class="text-center">8</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">9.12秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c2',8)" class="detail" id='c2'>详细</a></td>
+</tr>
+
+    <tr id='pt2_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_01_tags_delete_labels_success</div></td>
+        <td style="vertical-align: middle">参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt2_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt2_1'>通过</button>
+        <div id='div_pt2_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt2_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt2_1'>通过</button>
+        <div id='div_pt2_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt2_1: [2022-09-01 16:25:22,080] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:22,508] - log.py] - INFO: 开始执行用例：获取标签，参数填写正确
+{'errcode': 0, 'errmsg': 'ok'}
+[2022-09-01 16:25:22,884] - log.py] - INFO: 返回数据正确，返回结果ok
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt2_2' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_02_tags_delete_labels_fail</div></td>
+        <td style="vertical-align: middle">access_token参数未填</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt2_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt2_2'>通过</button>
+        <div id='div_pt2_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt2_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt2_2'>通过</button>
+        <div id='div_pt2_2' class="collapse in">
+        <pre style="text-align:left">
+        
+pt2_2: [2022-09-01 16:25:22,885] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:23,243] - log.py] - INFO: 开始执行用例：删除标签标签，access_token参数未填
+[2022-09-01 16:25:23,527] - log.py] - INFO: 返回数据正确，返回结果40001
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt2_3' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_03_tags_delete_labels_access_token_fail</div></td>
+        <td style="vertical-align: middle">access_token参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt2_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt2_3'>通过</button>
+        <div id='div_pt2_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt2_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt2_3'>通过</button>
+        <div id='div_pt2_3' class="collapse in">
+        <pre style="text-align:left">
+        
+pt2_3: [2022-09-01 16:25:23,528] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:23,887] - log.py] - INFO: 开始执行用例：删除标签，access_token参数填写错误
+[2022-09-01 16:25:26,927] - log.py] - INFO: 返回数据正确，返回结果40001
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt2_4' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_delete_labels_parament_error_1</div></td>
+        <td style="vertical-align: middle">参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt2_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt2_4'>通过</button>
+        <div id='div_pt2_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt2_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt2_4'>通过</button>
+        <div id='div_pt2_4' class="collapse in">
+        <pre style="text-align:left">
+        
+pt2_4: [2022-09-01 16:25:26,928] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:27,398] - log.py] - INFO: 开始执行用例：删除标签标签，参数填写错误
+{'errcode': 45058, 'errmsg': "can't modify sys tag hint: [mHaeKoEVf-UBGHYa] rid: 63106c79-7405afa0-125d38a3"}
+[2022-09-01 16:25:27,768] - log.py] - INFO: 返回数据正确，返回结果45058
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt2_5' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_delete_labels_parament_error_2</div></td>
+        <td style="vertical-align: middle">参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt2_5' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt2_5'>通过</button>
+        <div id='div_pt2_5' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt2_5' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt2_5'>通过</button>
+        <div id='div_pt2_5' class="collapse in">
+        <pre style="text-align:left">
+        
+pt2_5: [2022-09-01 16:25:27,769] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:28,208] - log.py] - INFO: 开始执行用例：删除标签标签，参数填写错误
+{'errcode': 47001, 'errmsg': 'data format error hint: [mHaeKE6Vf-2Wyt8a] rid: 63106c7a-6b398030-5599f843'}
+[2022-09-01 16:25:28,607] - log.py] - INFO: 返回数据正确，返回结果47001
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt2_6' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_delete_labels_parament_error_3</div></td>
+        <td style="vertical-align: middle">参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt2_6' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt2_6'>通过</button>
+        <div id='div_pt2_6' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt2_6' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt2_6'>通过</button>
+        <div id='div_pt2_6' class="collapse in">
+        <pre style="text-align:left">
+        
+pt2_6: [2022-09-01 16:25:28,608] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:28,963] - log.py] - INFO: 开始执行用例：删除标签标签，参数填写错误
+{'errcode': 45058, 'errmsg': "can't modify sys tag hint: [mHae58sQf-pWIT2a] rid: 63106c7b-2548b49a-40d7299a"}
+[2022-09-01 16:25:29,369] - log.py] - INFO: 返回数据正确，返回结果45058
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt2_7' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_delete_labels_parament_error_4</div></td>
+        <td style="vertical-align: middle">参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt2_7' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt2_7'>通过</button>
+        <div id='div_pt2_7' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt2_7' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt2_7'>通过</button>
+        <div id='div_pt2_7' class="collapse in">
+        <pre style="text-align:left">
+        
+pt2_7: [2022-09-01 16:25:29,370] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:29,884] - log.py] - INFO: 开始执行用例：删除标签标签，参数填写错误
+{'errcode': 45058, 'errmsg': "can't modify sys tag hint: [mHaeevj2e-c] rid: 63106c7c-34fa1018-143f5326"}
+[2022-09-01 16:25:30,297] - log.py] - INFO: 返回数据正确，返回结果45058
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt2_8' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_delete_labels_parament_error_5</div></td>
+        <td style="vertical-align: middle">参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt2_8' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt2_8'>通过</button>
+        <div id='div_pt2_8' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt2_8' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt2_8'>通过</button>
+        <div id='div_pt2_8' class="collapse in">
+        <pre style="text-align:left">
+        
+pt2_8: [2022-09-01 16:25:30,298] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:30,729] - log.py] - INFO: 开始执行用例：删除标签标签，参数填写错误
+{'errcode': 45058, 'errmsg': "can't modify sys tag hint: [mHaeB9sQf-mG89GA] rid: 63106c7d-392eda67-74115944"}
+[2022-09-01 16:25:31,195] - log.py] - INFO: 返回数据正确，返回结果45058
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>TestEditLabel</td>
+    <td>编辑标签接口类</td>
+    <td class="text-center">12</td>
+    <td class="text-center">12</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">9.66秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c3',12)" class="detail" id='c3'>详细</a></td>
+</tr>
+
+    <tr id='pt3_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_01_tags_edit_label_success</div></td>
+        <td style="vertical-align: middle">参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_1'>通过</button>
+        <div id='div_pt3_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_1'>通过</button>
+        <div id='div_pt3_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_1: [2022-09-01 16:25:31,196] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:31,595] - log.py] - INFO: 开始执行用例：编辑标签，参数填写正确
+ok
+[2022-09-01 16:25:31,995] - log.py] - INFO: 返回数据正确，返回结果ok
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_2' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_02_tags_edit_label_access_token_not</div></td>
+        <td style="vertical-align: middle">access_token未填写</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_2'>通过</button>
+        <div id='div_pt3_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_2'>通过</button>
+        <div id='div_pt3_2' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_2: [2022-09-01 16:25:31,996] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:32,422] - log.py] - INFO: 开始执行用例：编辑标签，access_token参数未填写
+[2022-09-01 16:25:32,722] - log.py] - INFO: 返回数据正确，返回结果40001
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_3' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_edit_label_parameter_success_1</div></td>
+        <td style="vertical-align: middle">参数正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_3'>通过</button>
+        <div id='div_pt3_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_3'>通过</button>
+        <div id='div_pt3_3' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_3: [2022-09-01 16:25:32,722] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:33,207] - log.py] - INFO: 开始执行用例：编辑标签，参数填写正确
+ok
+[2022-09-01 16:25:33,638] - log.py] - INFO: 返回数据正确，返回结果ok
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_4' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_edit_label_parameter_success_2</div></td>
+        <td style="vertical-align: middle">参数正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_4'>通过</button>
+        <div id='div_pt3_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_4'>通过</button>
+        <div id='div_pt3_4' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_4: [2022-09-01 16:25:33,639] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:34,007] - log.py] - INFO: 开始执行用例：编辑标签，参数填写正确
+ok
+[2022-09-01 16:25:34,539] - log.py] - INFO: 返回数据正确，返回结果ok
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_5' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_edit_label_parameter_success_3</div></td>
+        <td style="vertical-align: middle">参数正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_5' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_5'>通过</button>
+        <div id='div_pt3_5' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_5' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_5'>通过</button>
+        <div id='div_pt3_5' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_5: [2022-09-01 16:25:34,540] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:34,876] - log.py] - INFO: 开始执行用例：编辑标签，参数填写正确
+ok
+[2022-09-01 16:25:35,250] - log.py] - INFO: 返回数据正确，返回结果ok
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_6' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_edit_label_parameter_success_4</div></td>
+        <td style="vertical-align: middle">参数正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_6' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_6'>通过</button>
+        <div id='div_pt3_6' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_6' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_6'>通过</button>
+        <div id='div_pt3_6' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_6: [2022-09-01 16:25:35,251] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:35,678] - log.py] - INFO: 开始执行用例：编辑标签，参数填写正确
+ok
+[2022-09-01 16:25:36,085] - log.py] - INFO: 返回数据正确，返回结果ok
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_7' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_tags_edit_label_parameter_success_5</div></td>
+        <td style="vertical-align: middle">参数正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_7' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_7'>通过</button>
+        <div id='div_pt3_7' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_7' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_7'>通过</button>
+        <div id='div_pt3_7' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_7: [2022-09-01 16:25:36,085] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:36,459] - log.py] - INFO: 开始执行用例：编辑标签，参数填写正确
+ok
+[2022-09-01 16:25:36,842] - log.py] - INFO: 返回数据正确，返回结果ok
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_8' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_tags_edit_label_parameter_error_1</div></td>
+        <td style="vertical-align: middle">参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_8' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_8'>通过</button>
+        <div id='div_pt3_8' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_8' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_8'>通过</button>
+        <div id='div_pt3_8' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_8: [2022-09-01 16:25:36,843] - log.py] - INFO: 获取touken值
+45058
+[2022-09-01 16:25:37,658] - log.py] - INFO: 返回数据正确，返回结果45058
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_9' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_tags_edit_label_parameter_error_2</div></td>
+        <td style="vertical-align: middle">参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_9' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_9'>通过</button>
+        <div id='div_pt3_9' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_9' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_9'>通过</button>
+        <div id='div_pt3_9' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_9: [2022-09-01 16:25:37,659] - log.py] - INFO: 获取touken值
+-1
+[2022-09-01 16:25:38,485] - log.py] - INFO: 返回数据正确，返回结果-1
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_10' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_tags_edit_label_parameter_error_3</div></td>
+        <td style="vertical-align: middle">参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_10' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_10'>通过</button>
+        <div id='div_pt3_10' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_10' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_10'>通过</button>
+        <div id='div_pt3_10' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_10: [2022-09-01 16:25:38,486] - log.py] - INFO: 获取touken值
+45157
+[2022-09-01 16:25:39,283] - log.py] - INFO: 返回数据正确，返回结果45157
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_11' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_tags_edit_label_parameter_error_4</div></td>
+        <td style="vertical-align: middle">参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_11' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_11'>通过</button>
+        <div id='div_pt3_11' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_11' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_11'>通过</button>
+        <div id='div_pt3_11' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_11: [2022-09-01 16:25:39,284] - log.py] - INFO: 获取touken值
+45158
+[2022-09-01 16:25:40,093] - log.py] - INFO: 返回数据正确，返回结果45158
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt3_12' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_tags_edit_label_parameter_error_5</div></td>
+        <td style="vertical-align: middle">参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_12' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_12'>通过</button>
+        <div id='div_pt3_12' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_12' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_12'>通过</button>
+        <div id='div_pt3_12' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_12: [2022-09-01 16:25:40,094] - log.py] - INFO: 获取touken值
+45157
+[2022-09-01 16:25:40,859] - log.py] - INFO: 返回数据正确，返回结果45157
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>TestCreateLabel</td>
+    <td>获取标签接口类</td>
+    <td class="text-center">3</td>
+    <td class="text-center">3</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">2.24秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c4',3)" class="detail" id='c4'>详细</a></td>
+</tr>
+
+    <tr id='pt4_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_01_tags_get_labels_success</div></td>
+        <td style="vertical-align: middle">参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt4_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt4_1'>通过</button>
+        <div id='div_pt4_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt4_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt4_1'>通过</button>
+        <div id='div_pt4_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt4_1: [2022-09-01 16:25:40,859] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:41,245] - log.py] - INFO: 开始执行用例：获取标签，参数填写正确
+{'tags': [{'id': 2, 'name': '星标组', 'count': 0}, {'id': 102, 'name': '嘿嘿', 'count': 0}, {'id': 103, 'name': '嘿嘿1', 'count': 0}, {'id': 104, 'name': '大蛇啦啦1', 'count': 0}, {'id': 105, 'name': '大蛇啦啦12', 'count': 0}, {'id': 107, 'name': '\\u5e7f\\u897f\\u8001\\u886819', 'count': 0}, {'id': 108, 'name': '\\u5e7f\\u897f\\u8001\\u88685', 'count': 0}, {'id': 109, 'name': '\\u5e7f\\u897f\\u8001\\u886812', 'count': 0}, {'id': 110, 'name': '\\u5e7f\\u897f\\u8001\\u886811', 'count': 0}, {'id': 111, 'name': '\\u5e7f\\u897f\\u8001\\u886887', 'count': 0}, {'id': 112, 'name': '\\u5e7f\\u897f\\u8001\\u886829', 'count': 0}, {'id': 113, 'name': '\\u5e7f\\u897f\\u8001\\u886870', 'count': 0}, {'id': 114, 'name': '\\u5e7f\\u897f\\u8001\\u886833', 'count': 0}, {'id': 115, 'name': '\\u5e7f\\u897f\\u8001\\u886816', 'count': 0}, {'id': 116, 'name': '\\u5e7f\\u897f\\u8001\\u886855', 'count': 0}, {'id': 117, 'name': '\\u5e7f\\u897f\\u8001\\u88683', 'count': 0}, {'id': 118, 'name': '\\u5e7f\\u897f\\u8001\\u886841', 'count': 0}, {'id': 119, 'name': '\\u5e7f\\u897f\\u8001\\u886810', 'count': 0}, {'id': 120, 'name': '\\u5e7f\\u897f\\u8001\\u886867', 'count': 0}, {'id': 121, 'name': '\\u5e7f\\u897f\\u8001\\u886846', 'count': 0}, {'id': 122, 'name': '\\u5e7f\\u897f\\u8001\\u88684823', 'count': 0}, {'id': 123, 'name': '\\u5e7f\\u897f\\u8001\\u88688144', 'count': 0}, {'id': 125, 'name': '\\u5e7f\\u897f\\u8001\\u8868618', 'count': 0}, {'id': 126, 'name': '\\u5e7f\\u897f\\u8001\\u886873375', 'count': 0}, {'id': 127, 'name': '\\u5e7f\\u897f\\u8001\\u886851640', 'count': 0}, {'id': 128, 'name': '\\u86c7', 'count': 0}, {'id': 129, 'name': '\\u86c7\\u76ae', 'count': 0}, {'id': 130, 'name': '\\u6211\\u662f\\u86c7\\u76ae123', 'count': 0}, {'id': 131, 'name': 'qwertyuiopasdfghjklzxcvbnmqwe', 'count': 0}, {'id': 132, 'name': 'qwertyuiopasdfghjklzxcvbnmqwer', 'count': 0}, {'id': 133, 'name': '\\u5e7f\\u897f\\u8001\\u886860818', 'count': 0}, {'id': 134, 'name': '\\u5e7f\\u897f\\u8001\\u886887786', 'count': 0}, {'id': 135, 'name': '\\u5e7f\\u897f\\u8001\\u886841168', 'count': 0}, {'id': 136, 'name': '\\u5e7f\\u897f\\u8001\\u886855252', 'count': 0}, {'id': 137, 'name': '\\u5e7f\\u897f\\u8001\\u8868', 'count': 0}]}
+[2022-09-01 16:25:41,620] - log.py] - INFO: 返回数据正确，返回结果星标组
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt4_2' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_02_tags_get_labels_fail</div></td>
+        <td style="vertical-align: middle">access_token参数未填</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt4_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt4_2'>通过</button>
+        <div id='div_pt4_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt4_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt4_2'>通过</button>
+        <div id='div_pt4_2' class="collapse in">
+        <pre style="text-align:left">
+        
+pt4_2: [2022-09-01 16:25:41,621] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:42,075] - log.py] - INFO: 开始执行用例：获取标签，access_token参数未填写
+[2022-09-01 16:25:42,393] - log.py] - INFO: 返回数据正确，返回结果41001
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt4_3' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_03_tags_get_labels_access_token_fail</div></td>
+        <td style="vertical-align: middle">access_token参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt4_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt4_3'>通过</button>
+        <div id='div_pt4_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt4_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt4_3'>通过</button>
+        <div id='div_pt4_3' class="collapse in">
+        <pre style="text-align:left">
+        
+pt4_3: [2022-09-01 16:25:42,394] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:42,795] - log.py] - INFO: 开始执行用例：获取标签，access_token参数填写错误
+[2022-09-01 16:25:43,099] - log.py] - INFO: 返回数据正确，返回结果40001
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>ModifyComments</td>
+    <td>修改备注名接口类</td>
+    <td class="text-center">12</td>
+    <td class="text-center">12</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">9.68秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c5',12)" class="detail" id='c5'>详细</a></td>
+</tr>
+
+    <tr id='pt5_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_01_modify_comments_correct_filling</div></td>
+        <td style="vertical-align: middle">修改备注名，参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_1'>通过</button>
+        <div id='div_pt5_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_1'>通过</button>
+        <div id='div_pt5_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_1: [2022-09-01 16:25:43,100] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:43,438] - log.py] - INFO: 开始执行用例：修改备注名，参数填写正确
+[2022-09-01 16:25:43,912] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_2' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_02_modify_comments_access_token_parameter_not_filled</div></td>
+        <td style="vertical-align: middle">access_token参数未填</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_2'>通过</button>
+        <div id='div_pt5_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_2'>通过</button>
+        <div id='div_pt5_2' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_2: [2022-09-01 16:25:43,913] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:44,322] - log.py] - INFO: 开始执行用例：修改备注名，access_token参数未填
+[2022-09-01 16:25:44,669] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_3' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_03_modify_comments_access_token_parameter_filling_error</div></td>
+        <td style="vertical-align: middle">access_token参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_3'>通过</button>
+        <div id='div_pt5_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_3'>通过</button>
+        <div id='div_pt5_3' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_3: [2022-09-01 16:25:44,670] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:45,109] - log.py] - INFO: 开始执行用例：修改备注名，access_token参数填写错误
+{'errcode': 40001, 'errmsg': 'invalid credential, access_token is invalid or not latest rid: 63106c8b-359cd2c8-2202e61b'}
+[2022-09-01 16:25:45,492] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_4' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_modify_comments_parameter_error_1</div></td>
+        <td style="vertical-align: middle">修改备注名，openid,remark参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_4'>通过</button>
+        <div id='div_pt5_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_4'>通过</button>
+        <div id='div_pt5_4' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_4: [2022-09-01 16:25:45,493] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:45,900] - log.py] - INFO: 开始执行用例：修改备注名，openid,remark参数填写错误
+[2022-09-01 16:25:46,264] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_5' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_modify_comments_parameter_error_2</div></td>
+        <td style="vertical-align: middle">修改备注名，openid,remark参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_5' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_5'>通过</button>
+        <div id='div_pt5_5' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_5' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_5'>通过</button>
+        <div id='div_pt5_5' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_5: [2022-09-01 16:25:46,264] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:46,669] - log.py] - INFO: 开始执行用例：修改备注名，openid,remark参数填写错误
+[2022-09-01 16:25:47,068] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_6' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_04_modify_comments_parameter_error_3</div></td>
+        <td style="vertical-align: middle">修改备注名，openid,remark参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_6' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_6'>通过</button>
+        <div id='div_pt5_6' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_6' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_6'>通过</button>
+        <div id='div_pt5_6' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_6: [2022-09-01 16:25:47,068] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:47,476] - log.py] - INFO: 开始执行用例：修改备注名，openid,remark参数填写错误
+[2022-09-01 16:25:47,818] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_7' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_modify_comments_parameter_success_1</div></td>
+        <td style="vertical-align: middle">修改备注名，openid,remark参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_7' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_7'>通过</button>
+        <div id='div_pt5_7' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_7' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_7'>通过</button>
+        <div id='div_pt5_7' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_7: [2022-09-01 16:25:47,819] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:48,154] - log.py] - INFO: 开始执行用例：修改备注名，openid,remark参数填写正确
+[2022-09-01 16:25:48,558] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_8' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_modify_comments_parameter_success_2</div></td>
+        <td style="vertical-align: middle">修改备注名，openid,remark参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_8' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_8'>通过</button>
+        <div id='div_pt5_8' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_8' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_8'>通过</button>
+        <div id='div_pt5_8' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_8: [2022-09-01 16:25:48,558] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:48,949] - log.py] - INFO: 开始执行用例：修改备注名，openid,remark参数填写正确
+[2022-09-01 16:25:49,416] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_9' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_modify_comments_parameter_success_3</div></td>
+        <td style="vertical-align: middle">修改备注名，openid,remark参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_9' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_9'>通过</button>
+        <div id='div_pt5_9' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_9' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_9'>通过</button>
+        <div id='div_pt5_9' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_9: [2022-09-01 16:25:49,417] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:49,864] - log.py] - INFO: 开始执行用例：修改备注名，openid,remark参数填写正确
+[2022-09-01 16:25:50,286] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_10' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_modify_comments_parameter_success_4</div></td>
+        <td style="vertical-align: middle">修改备注名，openid,remark参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_10' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_10'>通过</button>
+        <div id='div_pt5_10' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_10' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_10'>通过</button>
+        <div id='div_pt5_10' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_10: [2022-09-01 16:25:50,287] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:50,659] - log.py] - INFO: 开始执行用例：修改备注名，openid,remark参数填写正确
+[2022-09-01 16:25:51,139] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_11' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_modify_comments_parameter_success_5</div></td>
+        <td style="vertical-align: middle">修改备注名，openid,remark参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_11' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_11'>通过</button>
+        <div id='div_pt5_11' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_11' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_11'>通过</button>
+        <div id='div_pt5_11' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_11: [2022-09-01 16:25:51,139] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:51,522] - log.py] - INFO: 开始执行用例：修改备注名，openid,remark参数填写正确
+[2022-09-01 16:25:51,978] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt5_12' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_05_modify_comments_parameter_success_6</div></td>
+        <td style="vertical-align: middle">修改备注名，openid,remark参数填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_12' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_12'>通过</button>
+        <div id='div_pt5_12' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_12' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_12'>通过</button>
+        <div id='div_pt5_12' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_12: [2022-09-01 16:25:51,979] - log.py] - INFO: 获取touken值
+[2022-09-01 16:25:52,345] - log.py] - INFO: 开始执行用例：修改备注名，openid,remark参数填写正确
+[2022-09-01 16:25:52,779] - log.py] - INFO: 接口返回数据正确
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>testToken</td>
+    <td>获取token测试类</td>
+    <td class="text-center">7</td>
+    <td class="text-center">7</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">2.39秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c6',7)" class="detail" id='c6'>详细</a></td>
+</tr>
+
+    <tr id='pt6_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_01_param_fill_in</div></td>
+        <td style="vertical-align: middle">所有接口参数都填写正确</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt6_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt6_1'>通过</button>
+        <div id='div_pt6_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt6_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt6_1'>通过</button>
+        <div id='div_pt6_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt6_1: [2022-09-01 16:25:52,779] - log.py] - INFO: 开始执行接口用例：所有接口参数都填写正确
+[2022-09-01 16:25:53,154] - log.py] - INFO: 断言成功
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt6_2' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_02_param_required_1</div></td>
+        <td style="vertical-align: middle">一个参数未填写</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt6_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt6_2'>通过</button>
+        <div id='div_pt6_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt6_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt6_2'>通过</button>
+        <div id='div_pt6_2' class="collapse in">
+        <pre style="text-align:left">
+        
+pt6_2: [2022-09-01 16:25:53,155] - log.py] - INFO: 开始执行接口用例：一个参数未填写
+[2022-09-01 16:25:53,537] - log.py] - INFO: 断言成功
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt6_3' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_02_param_required_2</div></td>
+        <td style="vertical-align: middle">一个参数未填写</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt6_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt6_3'>通过</button>
+        <div id='div_pt6_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt6_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt6_3'>通过</button>
+        <div id='div_pt6_3' class="collapse in">
+        <pre style="text-align:left">
+        
+pt6_3: [2022-09-01 16:25:53,538] - log.py] - INFO: 开始执行接口用例：一个参数未填写
+[2022-09-01 16:25:53,812] - log.py] - INFO: 断言成功
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt6_4' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_02_param_required_3</div></td>
+        <td style="vertical-align: middle">一个参数未填写</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt6_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt6_4'>通过</button>
+        <div id='div_pt6_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt6_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt6_4'>通过</button>
+        <div id='div_pt6_4' class="collapse in">
+        <pre style="text-align:left">
+        
+pt6_4: [2022-09-01 16:25:53,813] - log.py] - INFO: 开始执行接口用例：一个参数未填写
+[2022-09-01 16:25:54,237] - log.py] - INFO: 断言成功
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt6_5' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_03_param_required1_1</div></td>
+        <td style="vertical-align: middle">一个参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt6_5' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt6_5'>通过</button>
+        <div id='div_pt6_5' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt6_5' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt6_5'>通过</button>
+        <div id='div_pt6_5' class="collapse in">
+        <pre style="text-align:left">
+        
+pt6_5: [2022-09-01 16:25:54,238] - log.py] - INFO: 一个参数填写错误
+[2022-09-01 16:25:54,557] - log.py] - INFO: 断言成功
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt6_6' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_03_param_required1_2</div></td>
+        <td style="vertical-align: middle">一个参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt6_6' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt6_6'>通过</button>
+        <div id='div_pt6_6' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt6_6' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt6_6'>通过</button>
+        <div id='div_pt6_6' class="collapse in">
+        <pre style="text-align:left">
+        
+pt6_6: [2022-09-01 16:25:54,557] - log.py] - INFO: 一个参数填写错误
+[2022-09-01 16:25:54,868] - log.py] - INFO: 断言成功
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt6_7' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_03_param_required1_3</div></td>
+        <td style="vertical-align: middle">一个参数填写错误</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt6_7' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt6_7'>通过</button>
+        <div id='div_pt6_7' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt6_7' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt6_7'>通过</button>
+        <div id='div_pt6_7' class="collapse in">
+        <pre style="text-align:left">
+        
+pt6_7: [2022-09-01 16:25:54,869] - log.py] - INFO: 一个参数填写错误
+[2022-09-01 16:25:55,172] - log.py] - INFO: 断言成功
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr id='total_row' class="text-center active">
+    <td colspan='2'>总计</td>
+    <td>53</td>
+    <td>47</td>
+    <td>0</td>
+    <td>6</td>
+    <td>42.35秒</td>
+    <td>通过率：88.68%</td>
+</tr>
+</table>
+
+<div id='ending'> </div>
+    <div id="toTop" style=" position:fixed;right:50px; bottom:30px; width:20px; height:20px;cursor:pointer; display: none">
+    <a><span class="glyphicon glyphicon-eject" style = "font-size:30px;" aria-hidden="true">
+    </span></a></div>
+    
+</body>
+</html>

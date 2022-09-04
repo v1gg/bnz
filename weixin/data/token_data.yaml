@@ -1,0 +1,18 @@
+---
+#grant_type,appID,appsecret,code
+grant_type: ""
+appID: "wx0e86f42f1bf2a80d"
+appsecret: "5deed6399a910c1849ac9a85f345780b"
+code: 40002
+---
+#grant_type,appID,appsecret,code
+grant_type: "client_credential"
+appID: ""
+appsecret: "5deed6399a910c1849ac9a85f345780b"
+code: 41002
+---
+#grant_type,appID,appsecret,code
+grant_type: "client_credential"
+appID: "wx0e86f42f1bf2a80d"
+appsecret: ""
+code: 41004
