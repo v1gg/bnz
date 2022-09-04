@@ -1,0 +1,6 @@
+
+BASE:
+  #log等级
+  log_level: "info"
+  test:
+    host: https://dev.bnzedu.com
